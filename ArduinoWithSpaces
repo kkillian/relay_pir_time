@@ -24,34 +24,37 @@ void loop() {
   if( digitalRead(pir) == HIGH ) {   // opening for if block
     lastmovement = now;
   
-    while  (now - lastmovement < kill) { // open for while loop   // last movement doesn't havea value assigned to it yet
-    
-      // Does this code go inside the if statement
-      start=millis();
+    // Case 1: time is with time limit
+    while  (now - lastmovement < kill) { // open for while loop   // last movement doesn't have a value assigned to it yet
+   
+      // turn everthing on 
       digitalWrite(relay, HIGH);
       digitalWrite(led,HIGH);
       Serial.print("movement!");
       
+      // detected more movement.
+      if (digitalRead(pir) == HIGH ){
+        // reset lastmovement time
+        lastmovement = now
+      }
+      
     } // close for while loop
     
-    while (now + lastmovement > kill) {
+    // Case 2: time is outside time limit 
+    while (now - lastmovement > kill) {
     
-      start=millis();
+      // turn everthing off
       digitalWrite(relay, LOW);
       digitalWrite(led, LOW);
       Serial.print("kill!");
       
-      // check for pir being retriggered
+      // detected more movement.
       if ( digitalRead(pir) == HIGH ){
         // reset lastmovement time
         lastmovement = now
       }
  
-    }
-     
+    }// end of second while loop
+    
   } // close for if block
-
-
-  
-
 }
