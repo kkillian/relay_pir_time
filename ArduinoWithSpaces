@@ -1,0 +1,46 @@
+
+int pir = 2; 
+int relay = ~9;
+int led = 12;
+unsigned long lastmovement;
+unsigned long now;
+int movement = 0;
+long kill = 10000 // relay will turn off load if pir hasn't been activated in 10 seconds 
+
+
+void setup() {
+  Serial.begin(9600);    
+  pinMode(pir, INPUT);
+  pinMode(relay, OUTPUT);
+  pinMode(led, OUTPUT);
+}
+
+
+void loop() {
+
+  movement = digitalRead(pir);
+  long now=millis()
+
+  if( digitalRead(pir) == HIGH ) {
+    if(now + lastmovement < kill)      // last movement doesn't havea value assigned to it yet
+  }
+
+  // Does this code go inside the if statement
+  start=millis();
+  digitalWrite(relay, HIGH);
+  digitalWrite(led,HIGH);
+  Serial.print("movement!");
+
+  {                                    // What are these brackets for? Do they belong to the previous if statement?
+    long now=millis();
+    if( digitalRead(pir)==LOW )        // What code is supposed to be executed if this evaluates to true?
+  }
+
+  if(now + lastmovement > kill) {
+      start=millis();
+      digitalWrite(relay, LOW);
+      digitalWrite(led, LOW);
+      Serial.print("kill!");
+  }
+
+}
