@@ -19,18 +19,19 @@ void setup() {
 void loop() {
 
   movement = digitalRead(pir);
-  long now=millis()
+  long now = millis()
 
   if( digitalRead(pir) == HIGH ) {
-    if(now + lastmovement < kill)      // last movement doesn't havea value assigned to it yet
+    if(now + lastmovement < kill) {     // last movement doesn't havea value assigned to it yet
+      // Does this code go inside the if statement
+      start=millis();
+      digitalWrite(relay, HIGH);
+      digitalWrite(led,HIGH);
+      Serial.print("movement!");
+     }
   }
 
-  // Does this code go inside the if statement
-  start=millis();
-  digitalWrite(relay, HIGH);
-  digitalWrite(led,HIGH);
-  Serial.print("movement!");
-
+ 
   {                                    // What are these brackets for? Do they belong to the previous if statement?
     long now=millis();
     if( digitalRead(pir)==LOW )        // What code is supposed to be executed if this evaluates to true?
