@@ -99,7 +99,7 @@ void loop(){
            // a new motion sequence has been detected. When can just use millis() in the 
            // place of current time that way the time resets itself with out needing to keep track.
            lockLow = true;         
-           // digitalWrite(relay, LOW);
+           digitalWrite(relay, LOW); // turns relay off
            Serial.print("motion ended at ");      // output
            Serial.print((millis() - kill)/1000);  // converts millsecs to secs
            Serial.println(" sec");
