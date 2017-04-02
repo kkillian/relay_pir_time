@@ -31,7 +31,7 @@ int pirPin = 7;    // the digital pin connected to the PIR sensor's output
 int relay = 8;  // This will be the relay
 
 long unsigned int kill = 30000; // relay will turn off load if pir hasn't been activated in 30 seconds
-long unsigned int ontime = 0;
+long unsigned int ontime = 0;   // ontime stores the last time pir sensor triggered
 
 
 
@@ -77,7 +77,7 @@ void loop(){
        ontime = millis();
        
        if(lockLow){  
-         //makes sure we wait for a transition to LOW before any further output is made:
+         //makes sure we wait for a transition to LOW (current) before any further output is made:
          lockLow = false;            
          Serial.println("---");
          Serial.print("motion detected at ");
@@ -91,7 +91,7 @@ void loop(){
 
       // Here we use the led to visualize when the PIR sensor is low. If the LED is off
       // That means the PIR does not currently detect any movement.
-      if(digitalRead(pirPin) == LOW){    
+      if(digitalRead(pirPin) == LOW && digitalRead(relay) == HIGH){    
    
 
         if(takeLowTime){
@@ -102,13 +102,14 @@ void loop(){
        //if the sensor is low for more than the given pause, 
        //we assume that no more motion is going to happen
        //if((!lockLow && millis() - lowIn > kill) && ontime > 30000){  
-       if( ontime > kill ){  
+       if( millis() - ontime > kill ){  
          
            // makes sure this block of code is only executed again after 
            // a new motion sequence has been detected. When can just use millis() in the 
            // place of current time that way the time resets itself with out needing to keep track.
            lockLow = true;         
            digitalWrite(relay, LOW); // turns relay off
+           ontime = 0;
            Serial.print("motion ended at ");      // output
            Serial.print((millis() - kill)/1000);  // converts millsecs to secs
            Serial.println(" sec");
