@@ -31,6 +31,8 @@ int pirPin = 7;    // the digital pin connected to the PIR sensor's output
 int relay = 8;  // This will be the relay
 
 long unsigned int kill = 30000; // relay will turn off load if pir hasn't been activated in 30 seconds
+long unsigned int ontime = 0;
+
 
 
 /////////////////////////////
@@ -62,11 +64,17 @@ void setup(){
 //LOOP
 void loop(){
   
+     if(digitalRead(pirPin) == HIGH && digitalRead(relay) == HIGH){
+        Serial.println("Rest ON time");
+        ontime = millis();
+     }
+  
      // if pir is triggered AND the relay is off, go ahead and turn it on.
      if(digitalRead(pirPin) == HIGH && digitalRead(relay) == LOW){
        
        Serial.println("Relay ON");
        digitalWrite(relay, HIGH);
+       ontime = millis();
        
        if(lockLow){  
          //makes sure we wait for a transition to LOW before any further output is made:
@@ -93,7 +101,8 @@ void loop(){
        
        //if the sensor is low for more than the given pause, 
        //we assume that no more motion is going to happen
-       if((!lockLow && millis() - lowIn > kill) && digitalRead(relay) == HIGH){  
+       //if((!lockLow && millis() - lowIn > kill) && ontime > 30000){  
+       if( ontime > kill ){  
          
            // makes sure this block of code is only executed again after 
            // a new motion sequence has been detected. When can just use millis() in the 
